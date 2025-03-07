@@ -1,13 +1,14 @@
-import pylab
 import json
-import requests
-import sys
-import numpy as np
-from struct import unpack
-from base64 import b64decode
-from zlib import decompress
-from datetime import datetime
 import os
+import sys
+from base64 import b64decode
+from datetime import UTC, datetime
+from struct import unpack
+from zlib import decompress
+
+import numpy as np
+import requests
+from matplotlib import pylab
 
 FORMAT = 'zint' # zint | zlib | b64
 DEVICE_IP = 'lzfs45.mirror.twave.io/lzfs45'
@@ -17,6 +18,15 @@ PASS = os.getenv('T8_PASSWORD')
 MACHINE = 'LP_Turbine'
 POINT = 'MAD31CY005'
 PMODE = 'AM1'
+DATE = '11-04-2019 18:25:54'
+
+# Conversión de la fecha de captura al formato correcto (timestamp)
+
+DATE = datetime.strptime(DATE, '%d-%m-%Y %H:%M:%S').replace(tzinfo=UTC)
+DATE = int(DATE.timestamp())
+print(DATE)
+
+
 
 def zint_to_float(raw):
 	d = decompress(b64decode(raw.encode()))
@@ -34,6 +44,10 @@ decode_format = {
 	'zlib': zlib_to_float,
 	'b64': b64_to_float
 }
+
+
+
+
 '''
 print(f"Usuario: {USER}")
 print(f"contraseña: {PASS}")
@@ -43,7 +57,8 @@ if not USER or not PASS:
     exit(1)
     
     
-url = 'http://%s/rest/waves/%s/%s/%s/0?array_fmt=%s' % (DEVICE_IP, MACHINE, POINT, PMODE, FORMAT)
+    
+url = 'http://%s/rest/waves/%s/%s/%s/%s/0?array_fmt=%s' % (DEVICE_IP, MACHINE, POINT, PMODE, DATE, FORMAT)
 
 r = requests.get(url, auth=(USER, PASS))
 if r.status_code != 200:
