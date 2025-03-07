@@ -21,11 +21,19 @@ PMODE = 'AM1'
 DATE = '11-04-2019 18:25:54'
 
 # Conversión de la fecha de captura al formato correcto (timestamp)
-
 DATE = datetime.strptime(DATE, '%d-%m-%Y %H:%M:%S').replace(tzinfo=UTC)
-DATE = int(DATE.timestamp())
+DATE = str(int(DATE.timestamp()))
+'''
 print(DATE)
+'''
 
+# Imprimir las variables para depuración
+print("DEVICE_IP:", DEVICE_IP)
+print("MACHINE:", MACHINE)
+print("POINT:", POINT)
+print("PMODE:", PMODE)
+print("DATE:", DATE)
+print("FORMAT:", FORMAT)
 
 
 def zint_to_float(raw):
@@ -46,31 +54,39 @@ decode_format = {
 }
 
 
-
-
-'''
-print(f"Usuario: {USER}")
-print(f"contraseña: {PASS}")
-'''
 if not USER or not PASS:
     print("Error: Las variables de entorno T8_USER y T8_PASSWORD deben estar definidas.")
     exit(1)
+        
     
-    
-    
-url = 'http://%s/rest/waves/%s/%s/%s/%s/0?array_fmt=%s' % (DEVICE_IP, MACHINE, POINT, PMODE, DATE, FORMAT)
+url = "http://{}/rest/waves/{}/{}/{}/{}/?array_fmt={}".format(DEVICE_IP, MACHINE, POINT, PMODE, DATE, FORMAT)
 
-r = requests.get(url, auth=(USER, PASS))
+r = requests.get(url, auth=(USER, PASS), timeout=10)
+
+'''
+if r.status_code == 200:
+    print("Fechas disponibles:", r.json())  # Muestra las fechas
+else:
+    print("Error obteniendo las fechas. Código:", r.status_code)
+'''
+    
 if r.status_code != 200:
     print("Error getting data. Status code: ", r.status_code)
     sys.exit(1)
 
 ret = r.json()
 
+
 # extract json fields
 srate = float(ret['sample_rate'])
 factor = float(ret.get('factor', 1))
 raw = ret['data']
+
+'''
+snap_t = ret['snap_t']
+
+print(snap_t)
+'''
 
 wave = decode_format[FORMAT](raw)
 
