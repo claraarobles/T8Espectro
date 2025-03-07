@@ -10,9 +10,9 @@ from datetime import datetime
 import os
 
 FORMAT = 'zint' # zint | zlib | b64
-DEVICE_IP = 'lzfs45.mirror.twave.io'
-USER = 'user'
-PASS = 'pass'
+DEVICE_IP = 'lzfs45.mirror.twave.io/lzfs45'
+USER = os.getenv('T8_USER')
+PASS = os.getenv('T8_PASSWORD')
 
 MACHINE = 'LP_Turbine'
 POINT = 'MAD31CY005'
@@ -34,7 +34,14 @@ decode_format = {
 	'zlib': zlib_to_float,
 	'b64': b64_to_float
 }
-
+'''
+print(f"Usuario: {USER}")
+print(f"contraseña: {PASS}")
+'''
+if not USER or not PASS:
+    print("Error: Las variables de entorno T8_USER y T8_PASSWORD deben estar definidas.")
+    exit(1)
+    
     
 url = 'http://%s/rest/waves/%s/%s/%s/0?array_fmt=%s' % (DEVICE_IP, MACHINE, POINT, PMODE, FORMAT)
 
