@@ -27,12 +27,12 @@ DATE = str(int(DATE.timestamp()))
 def zint_to_float(raw):
     d = decompress(b64decode(raw.encode()))
     return np.array([unpack('h', d[i*2:(i+1)*2])[0] for i in range(int(len(d)/2))], 
-                    dtype='f')  
+                 dtype='f')
 
 def zlib_to_float(raw):
     d = decompress(b64decode(raw.encode()))
     return np.array([unpack('f', d[i*4:(i+1)*4])[0] for i in range(int(len(d)/4))], 
-                    dtype='f')
+                 dtype='f')
 
 def b64_to_float(raw):
     return np.fromstring(b64decode(raw.encode()), dtype='f')
@@ -49,9 +49,10 @@ if not USER or not PASS:
     exit(1)
         
     
-url = "http://{}/rest/waves/{}/{}/{}/{}/?array_fmt={}".format(DEVICE_IP, MACHINE, POINT, PMODE, DATE, FORMAT)
+url = "http://{}/rest/spectra/{}/{}/{}/{}/?array_fmt={}".format(DEVICE_IP, MACHINE, POINT, PMODE, DATE, FORMAT)
 
 r = requests.get(url, auth=(USER, PASS), timeout=10)
+
     
 if r.status_code != 200:
     print("Error getting data. Status code: ", r.status_code)
@@ -61,22 +62,23 @@ ret = r.json()
 
 
 # extract json fields
-srate = float(ret['sample_rate'])
-factor = float(ret.get('factor', 1))
+fmin = ret.get('min_freq', 0)
+fmax = ret['max_freq']
+factor = ret['factor']
 raw = ret['data']
 
 
-wave = decode_format[FORMAT](raw)
+sp = decode_format[FORMAT](raw)
 
 # apply numeric factor
-wave *= factor
+sp *= factor
 
-# get time axis
-t = pylab.linspace(0, (len(wave)/srate)*1000, len(wave))
+# get frequency axis
+freq = pylab.linspace(fmin, fmax, len(sp))
 
-pylab.title("Onda T8")
-pylab.xlabel("Tiempo (ms)")
+pylab.title("Espectro T8")
+pylab.xlabel("Frecuencia (Hz)")
 pylab.ylabel("Amplitud")
-pylab.plot(t, wave)
+pylab.plot(freq, sp)
 pylab.grid(True)
 pylab.show()
