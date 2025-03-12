@@ -14,11 +14,9 @@ def calcular_fft(wave, srate, n_fft=None):
     freqs = np.fft.fftfreq(n_fft, 1/srate)
     
     # Tomar solo la mitad del espectro (parte positiva)
-    half_spectrum = spectrum[n_fft//2]
-    half_freqs = freqs[:n_fft//2]
+    half_spectrum = np.asarray(spectrum[:n_fft//2])
+    half_freqs = np.asarray(freqs[:n_fft//2])
     
-    print(f"frequencies shape def: {freqs.shape}")
-    print(f"spectrum shape def: {spectrum.shape}")
     
     return half_freqs, (half_spectrum)
 

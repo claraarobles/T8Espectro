@@ -81,6 +81,7 @@ wave *= factor
 # get time axis
 t = pylab.linspace(0, (len(wave)/srate)*1000, len(wave))
 
+
 pylab.title("Onda T8")
 pylab.xlabel("Tiempo (ms)")
 pylab.ylabel("Amplitud")
