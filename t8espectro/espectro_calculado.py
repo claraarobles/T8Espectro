@@ -17,10 +17,10 @@ def calcular_fft(wave, srate, n_fft=None):
     half_spectrum = spectrum[n_fft//2]
     half_freqs = freqs[:n_fft//2]
     
-    print(f"frequencies shape: {freqs.shape}")
-    print(f"spectrum shape: {spectrum.shape}")
+    print(f"frequencies shape def: {freqs.shape}")
+    print(f"spectrum shape def: {spectrum.shape}")
     
-    return half_freqs, np.abs(half_spectrum)
+    return half_freqs, (half_spectrum)
 
 
 
