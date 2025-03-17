@@ -1,15 +1,18 @@
-import numpy as np
+
 import matplotlib.pyplot as pylab
-from t8espectro.onda_generada import wave, srate  # Onda generada y tasa de muestreo
+import numpy as np
+
 from t8espectro.espectro_calculado import calcular_fft  # FFT calculada
 from t8espectro.espectro_generado import freq, sp  # Espectro del T8
+from t8espectro.onda_generada import srate, wave  # Onda generada y tasa de muestreo
 
 # Obtener el espectro calculado usando la FFT
 freqs, spectrum = calcular_fft(wave, srate, n_fft=None)
 
-# Convertir las frecuencias y el espectro a arrays de numpy y tomar el valor absoluto del espectro
+# Convertir las frecuencias y el espectro a arrays de numpy y tomar el valor absoluto 
+# del espectro
 freqs = np.array(freqs)
-spectrum = np.abs(np.array(spectrum)) 
+spectrum = np.abs(np.array(spectrum))
 
 # Filtrar los datos para que coincidan con el rango de `freq` del espectro T8
 mask = (freqs >= freq.min()) & (freqs <= freq.max())

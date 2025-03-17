@@ -1,3 +1,4 @@
+
 import os
 import sys
 from base64 import b64decode
@@ -28,38 +29,35 @@ DATE = datetime.strptime(DATE, '%d-%m-%Y %H:%M:%S').replace(tzinfo=UTC)
 DATE = str(int(DATE.timestamp()))
 
 # Función para decodificar el formato 'zint' a float
-def zint_to_float(raw):
-    d = decompress(b64decode(raw.encode()))
-    return np.array([unpack('h', d[i*2:(i+1)*2])[0] for i in range(int(len(d)/2))], 
-                 dtype='f')
+def zint_to_float(raw_):
+    """
+    Decodes a 'zint' encoded string to a float numpy array.
 
-# Función para decodificar el formato 'zlib' a float
-def zlib_to_float(raw):
-    d = decompress(b64decode(raw.encode()))
-    return np.array([unpack('f', d[i*4:(i+1)*4])[0] for i in range(int(len(d)/4))], 
-                 dtype='f')
+    Parameters:
+    raw_ (str): The encoded string.
 
-# Función para decodificar el formato 'b64' a float
-def b64_to_float(raw):
-    return np.fromstring(b64decode(raw.encode()), dtype='f')
+    Returns:
+    numpy.ndarray: The decoded float array.
+    """
+    d = decompress(b64decode(raw_.encode()))
+    return np.array([unpack('h', d[i*2:(i+1)*2])[0] for i in range(int(len(d)/2))],
+                 dtype='f')
 
 # Diccionario para mapear el formato a la función de decodificación correspondiente
 decode_format = {
     'zint': zint_to_float,
-    'zlib': zlib_to_float,
-    'b64': b64_to_float
 }
 
 # Verificar si las credenciales del usuario están definidas
 if not USER or not PASS:
     print("Error: Las variables de entorno T8_USER y T8_PASSWORD deben estar definidas")
     exit(1)
-        
+
 # Construir la URL para la solicitud de datos
-url = "http://{}/rest/spectra/{}/{}/{}/{}/?array_fmt={}".format(DEVICE_IP, MACHINE, POINT, PMODE, DATE, FORMAT)
+URL = f"http://{DEVICE_IP}/rest/spectra/{MACHINE}/{POINT}/{PMODE}/{DATE}/?array_fmt={FORMAT}"
 
 # Realizar la solicitud al servidor
-r = requests.get(url, auth=(USER, PASS), timeout=10)
+r = requests.get(URL, auth=(USER, PASS), timeout=10)
 
 # Verificar si la solicitud fue exitosa
 if r.status_code != 200:

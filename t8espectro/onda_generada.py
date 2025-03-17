@@ -1,3 +1,4 @@
+
 import os
 import sys
 from base64 import b64decode
@@ -29,26 +30,23 @@ DATE = datetime.strptime(DATE, '%d-%m-%Y %H:%M:%S').replace(tzinfo=UTC)
 DATE = str(int(DATE.timestamp()))
 
 # Función para decodificar datos comprimidos en formato zint
-def zint_to_float(raw):
-    d = decompress(b64decode(raw.encode()))
-    return np.array([unpack('h', d[i*2:(i+1)*2])[0] for i in range(int(len(d)/2))], 
-                    dtype='f')  
+def zint_to_float(raw_):
+    """
+    Decodes compressed data in zint format to a float array.
 
-# Función para decodificar datos comprimidos en formato zlib
-def zlib_to_float(raw):
-    d = decompress(b64decode(raw.encode()))
-    return np.array([unpack('f', d[i*4:(i+1)*4])[0] for i in range(int(len(d)/4))], 
+    Args:
+        raw_ (str): The compressed data as a base64 encoded string.
+
+    Returns:
+        np.array: The decompressed data as a float array.
+    """
+    d = decompress(b64decode(raw_.encode()))
+    return np.array([unpack('h', d[i*2:(i+1)*2])[0] for i in range(int(len(d)/2))],
                     dtype='f')
-
-# Función para decodificar datos en formato base64
-def b64_to_float(raw):
-    return np.fromstring(b64decode(raw.encode()), dtype='f')
 
 # Diccionario para seleccionar la función de decodificación adecuada
 decode_format = {
     'zint': zint_to_float,
-    'zlib': zlib_to_float,
-    'b64': b64_to_float
 }
 
 # Verificar que las variables de entorno estén definidas
@@ -57,10 +55,11 @@ if not USER or not PASS:
     exit(1)
 
 # Construir la URL para la solicitud de datos
-url = "http://{}/rest/waves/{}/{}/{}/{}/?array_fmt={}".format(DEVICE_IP, MACHINE, POINT, PMODE, DATE, FORMAT)
+URL = f"http://{DEVICE_IP}/rest/waves/{MACHINE}/{POINT}/{PMODE}/{DATE}/"f"?array_fmt={FORMAT}"
+
 
 # Realizar la solicitud HTTP para obtener los datos
-r = requests.get(url, auth=(USER, PASS), timeout=10)
+r = requests.get(URL, auth=(USER, PASS), timeout=10)
 
 # Verificar que la solicitud fue exitosa
 if r.status_code != 200:

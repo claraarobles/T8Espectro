@@ -1,8 +1,12 @@
-from t8espectro.espectro_calculado import calcular_fft  # Importa la función desde tu código
+
 import numpy as np
 
+from t8espectro.espectro_calculado import (
+    calcular_fft,  # Importa la función desde tu código
+)
+
+
 def test_fft_output():
-    
     '''
     Prueba la función de Transformada Rápida de Fourier (FFT).
     Genera una señal senoidal de 50 Hz y calcula su FFT para verificar que 
@@ -16,16 +20,16 @@ def test_fft_output():
 
     # Datos de prueba: señal senoidal simple
     srate = 1000  # Frecuencia de muestreo en Hz
-    t = np.linspace(0, 1, srate, endpoint=False)  # 1 segundo de duración, vector de tiempo
+    t = np.linspace(0, 1, srate, endpoint=False)  # 1 segundo de duración
     freq_real = 50  # Frecuencia de la señal en Hz
-    wave = np.sin(2 * np.pi * freq_real * t)  # Genera una onda senoidal con la frecuencia especificada
+    wave = np.sin(2 * np.pi * freq_real * t)  # Genera una onda senoidal
 
     # Llama a la función para calcular la FFT de la señal
-    freqs, spectrum = calcular_fft(wave, srate)  
+    freqs, spectrum = calcular_fft(wave, srate)
 
     # Encuentra la frecuencia con el mayor valor en el espectro
-    peak_freq = freqs[np.argmax(np.abs(spectrum))] 
+    peak_freq = freqs[np.argmax(np.abs(spectrum))]
 
     # Verifica que la frecuencia detectada sea la esperada (50 Hz)
-    assert np.isclose(peak_freq, freq_real, atol=1), f"Se detectó {peak_freq} Hz en lugar de {freq_real} Hz"  
-
+    assert np.isclose(peak_freq, freq_real, atol=1), \
+        f"Se detectó {peak_freq} Hz en lugar de {freq_real} Hz"
