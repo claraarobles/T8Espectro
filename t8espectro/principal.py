@@ -29,7 +29,6 @@ pylab.plot(freqs_filtered, spectrum_scaled, label="Espectro Calculado")
 pylab.plot(freq, sp, label="Espectro T8", linestyle="--", alpha=0.6)
 
 # Añadir título y etiquetas al gráfico
-pylab.figure()
 pylab.title("Comparación de Espectros")
 pylab.xlabel("Frecuencia (Hz)")
 pylab.ylabel("Amplitud")

@@ -89,4 +89,4 @@ pylab.xlabel("Frecuencia (Hz)")
 pylab.ylabel("Amplitud")
 pylab.plot(freq, sp)
 pylab.grid(True)
-pylab.show()
+

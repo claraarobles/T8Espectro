@@ -93,4 +93,4 @@ pylab.xlabel("Tiempo (ms)")
 pylab.ylabel("Amplitud")
 pylab.plot(t, wave)
 pylab.grid(True)
-pylab.show()
+
