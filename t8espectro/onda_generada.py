@@ -87,6 +87,7 @@ wave *= factor
 t = pylab.linspace(0, (len(wave)/srate)*1000, len(wave))
 
 # Graficar la onda
+pylab.figure()
 pylab.title("Onda T8")
 pylab.xlabel("Tiempo (ms)")
 pylab.ylabel("Amplitud")

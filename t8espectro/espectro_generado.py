@@ -83,6 +83,7 @@ sp *= factor
 freq = pylab.linspace(fmin, fmax, len(sp))
 
 # Graficar el espectro
+pylab.figure()
 pylab.title("Espectro T8")
 pylab.xlabel("Frecuencia (Hz)")
 pylab.ylabel("Amplitud")

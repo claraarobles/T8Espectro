@@ -10,20 +10,20 @@ Este proyecto tiene como objetivo obtener, analizar y comparar señales espectra
 - Crear una interfaz de usuario intuitiva para facilitar la interacción con las herramientas desarrolladas.
 
 ## Organización
-1. **Obtención de Datos (onda_generada.py y espectro.py)**
+1. **Obtención de Datos (`onda_generada.py` y `principal.py`)**
     - Se conecta con el servidor T8 para obtener la señal de la máquina específica.
-    - Se decodifican los datos de acuerdo con el formato (zint, zlib o b64).
+    - Se decodifican los datos de acuerdo con el formato (zint).
     - Se grafican la forma de onda y el espectro de la señal.
 
-2. **Cálculo del Espectro (espectro_calculado.py)**
+2. **Cálculo del Espectro (`espectro_calculado.py`)**
     - Se aplica la Transformada Rápida de Fourier (FFT) para obtener el espectro de la señal capturada.
     - Se implementa zero-padding para mejorar la resolución en frecuencia.
 
-3. **Comparación de Resultados (graficar_espectro.py)**
+3. **Comparación de Resultados (`principal.py`)**
     - Se superponen los espectros calculado y obtenido desde el T8 en una misma gráfica.
     - Se evalúa la similitud entre ambas representaciones.
 
-4. **Pruebas y Validación (test_espectro_calculado.py)**
+4. **Pruebas y Validación (`test_espectro_calculado.py`)**
     - Se incluyen pruebas unitarias para verificar que la FFT detecta correctamente las frecuencias de prueba.
     - Se asegura la precisión del espectro obtenido.
 
@@ -32,7 +32,4 @@ Este proyecto tiene como objetivo obtener, analizar y comparar señales espectra
 - **Procesamiento de Datos**: Algoritmos y técnicas para limpiar y preparar los datos para el análisis.
 - **Análisis Espectral**: Métodos para interpretar y extraer información relevante de los datos espectrales.
 - **Visualización**: Herramientas para representar gráficamente los resultados del análisis.
-- **Interfaz de Usuario**: Desarrollo de una aplicación que permita a los usuarios interactuar con el sistema de manera eficiente.
-
-
 
